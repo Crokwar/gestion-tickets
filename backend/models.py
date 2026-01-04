@@ -15,6 +15,8 @@ class Ticket(Base):
 
     hora_creacion = Column(String, nullable=False)
 
+    detalles = Column(String, nullable=True)
+
     def __repr__(self):
         #Así se verá representado el objeto
         return f"<Ticket(id={self.id}, codigo={self.codigo}, estado={self.estado})"
