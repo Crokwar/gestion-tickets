@@ -1,10 +1,10 @@
 from sqlalchemy.orm import Session
-from datatime import datatime
+from datetime import datetime
 import models
 import schemas
 
-def crear_tickets(db:Session, ticket:schemas.TicketCreate):
-    ahora = datatime.now()
+def crear_ticket(db:Session, ticket:schemas.TicketCreate):
+    ahora = datetime.now()
 
     db_ticket = models.Ticket(
         codigo=ticket.codigo,
