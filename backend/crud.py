@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from datetime import datetime
-import models
-import schemas
+import models as models
+import schemas as schemas
 
 def crear_ticket(db:Session, ticket:schemas.TicketCreate):
     ahora = datetime.now()
@@ -27,14 +27,8 @@ def obtener_tickets(db:Session, skip: int = 0, limit: int = 100):
         .limit(limit)\
         .all()
 
-def obtener_tickets_por_fecha(db: Session, fecha: str):
-    return db.query(models.Ticket)\
-        .filter(models.Ticket.fecha == fecha)\
-        .order_by(models.Ticket.hora_creacion.desc())\
-        .all()
 
-
-def obtener_ticket_por_id(db:Session, ticket_id: int):
+def obtener_ticket_por_id(db:Session, id: int):
     return db.query(models.Ticket)\
         .filter(models.Ticket.id == id)\
         .first()
