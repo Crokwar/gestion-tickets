@@ -17,19 +17,8 @@ async function handleResponse<T>(response:Response): Promise<T> {
 
 //===============================TICKETS===================================================
 
-export async function obtenerTickets(): Promise<Ticket[]> {
-    const response = await fetch(`${API_URL}/tickets/`, { headers });
-    return handleResponse<Ticket[]>(response);
-}
-
-export async function obtenerTicketsPorFecha(fecha:string): Promise<Ticket[]> {
-    const response = await fetch(`${API_URL}/tickets/fecha/${fecha}`, { headers });
-    return handleResponse<Ticket[]>(response);
-}
-
-
 export async function crearTicket(ticket:TicketCreate): Promise<Ticket> {
-    const response = await fetch(`${API_URL}/tickets/`, {
+    const response = await fetch(`${API_URL}/tickets`, {
         method: 'POST',
         headers,
         body: JSON.stringify(ticket),
@@ -37,11 +26,7 @@ export async function crearTicket(ticket:TicketCreate): Promise<Ticket> {
     return handleResponse<Ticket>(response);
 }
 
-
-export async function actualizarTicket(
-  id: number,
-  datos: TicketUpdate
-): Promise<Ticket> {
+export async function actualizarTicket(id: number, datos: TicketUpdate): Promise<Ticket> {
   const response = await fetch(`${API_URL}/tickets/${id}`, {
     method: 'PUT',
     headers,
