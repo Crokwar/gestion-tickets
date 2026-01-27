@@ -1,91 +1,74 @@
-import React, { useState, useEffect } from 'react';
-import type { Ticket, EstadoTicket } from '../types/tickets'
-import { obtenerTickets, crearTicket, actualizarTicket, eliminarTicket } from '../services/api';
+import React, { useState } from "react";
+import type { Ticket, EstadoTicket } from "../types/tickets";
+import { crearTicket, actualizarTicket, eliminarTicket } from "../services/api";
 
 export const Home: React.FC = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
-  const [codigo, setCodigo] = useState('');
-  const [cargando, setCargando] = useState(true);
-  const [error, setError] = useState('');
+  const [codigo, setCodigo] = useState("");
+  const [error, setError] = useState("");
 
-  const fechaActual = new Date().toLocaleDateString('es-ES', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  const fechaActual = new Date().toLocaleDateString("es-ES", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
-
-  // Cargar tickets al montar el componente
-  useEffect(() => {
-    cargarTickets();
-  }, []);
-
-  const cargarTickets = async () => {
-    try {
-      setCargando(true);
-      const data = await obtenerTickets();
-      setTickets(data);
-      setError(''); 
-    } catch (err) {
-      setError('Error al cargar tickets. Asegúrate de que el backend esté corriendo.');
-      console.error(err);
-    } finally {
-      setCargando(false);
-    }
-  };
 
   const handleAgregarTicket = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!codigo.trim()) {
-      setError('Ingresa un código de ticket');
+      setError("Ingresa un código de ticket");
       return;
     }
 
     try {
       const nuevoTicket = await crearTicket({ codigo: codigo.trim() });
       setTickets([nuevoTicket, ...tickets]);
-      setCodigo('');
-      setError('');
+      setCodigo("");
+      setError("");
     } catch (err) {
-      setError('Error al crear ticket');
+      setError("Error al crear ticket");
       console.error(err);
     }
   };
 
   const handleCambiarEstado = async (id: number, nuevoEstado: EstadoTicket) => {
+    console.log(id, nuevoEstado);
     try {
-      const ticketActualizado = await actualizarTicket(id, { estado: nuevoEstado });
-      setTickets(tickets.map(t => t.id === id ? ticketActualizado : t));
+      const ticketActualizado = await actualizarTicket(id, {
+        estado: nuevoEstado,
+      });
+      setTickets(tickets.map((t) => (t.id === id ? ticketActualizado : t)));
     } catch (err) {
-      console.error('Error al cambiar estado:', err);
-      alert('Error al cambiar estado del ticket');
+      console.error("Error al cambiar estado:", err);
+      alert("Error al cambiar estado del ticket");
     }
   };
 
   const handleEliminar = async (id: number) => {
-    if (!confirm('¿Estás seguro de eliminar este ticket?')) return;
-    
+    if (!confirm("¿Estás seguro de eliminar este ticket?")) return;
+
     try {
       await eliminarTicket(id);
-      setTickets(tickets.filter(t => t.id !== id));
+      setTickets(tickets.filter((t) => t.id !== id));
     } catch (err) {
-      console.error('Error al eliminar:', err);
-      alert('Error al eliminar ticket');
+      console.error("Error al eliminar:", err);
+      alert("Error al eliminar ticket");
     }
   };
 
   const copiarAlPortapapeles = (texto: string) => {
     navigator.clipboard.writeText(texto);
-    alert('Código copiado: ' + texto);
+    alert("Código copiado: " + texto);
   };
 
   // Agrupar tickets por estado
-  const ticketsEnProceso = tickets.filter(t => t.estado === 'en_proceso');
-  const ticketsPendientes = tickets.filter(t => t.estado === 'pendiente');
-  const ticketsSolucionados = tickets.filter(t => t.estado === 'solucionado');
+  const ticketsEnProceso = tickets.filter((t) => t.estado === "en_proceso");
+  const ticketsPendientes = tickets.filter((t) => t.estado === "pendiente");
+  const ticketsSolucionados = tickets.filter((t) => t.estado === "solucionado");
 
-  if (cargando) {
+  /* if (cargando) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -94,7 +77,7 @@ export const Home: React.FC = () => {
         </div>
       </div>
     );
-  }
+  }*/
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -155,163 +138,212 @@ export const Home: React.FC = () => {
               {ticketsEnProceso.length}
             </span>
           </div>
-          <div className="space-y-3">
-            {ticketsEnProceso.length === 0 ? (
-              <div className="bg-white rounded-lg p-8 text-center text-gray-500">
-                No hay tickets en proceso
-              </div>
-            ) : (
-              ticketsEnProceso.map(ticket => (
-                <div key={ticket.id} className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3">
-                        <span className="text-lg font-semibold text-gray-800">{ticket.codigo}</span>
+
+          <div>
+            <div className="space-y-3 bg-white shadow-lg rounded-md p-0.5">
+              {ticketsEnProceso.length === 0 ? (
+                <div className="bg-white rounded-lg p-8 text-center text-gray-500">
+                  No hay tickets en proceso
+                </div>
+              ) : (
+                ticketsEnProceso.map((ticket) => (
+                  <div
+                    key={ticket.id}
+                    className="bg-white rounded-lg shadow m-2 p-2 hover:shadow-lg transition"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3">
+                          <span className="text-lg font-semibold text-gray-800">
+                            {ticket.codigo}
+                          </span>
+                          <button
+                            onClick={() => copiarAlPortapapeles(ticket.codigo)}
+                            className="text-sm text-blue-600 hover:text-blue-800"
+                          >
+                            📋 Copiar
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex gap-2 ml-4">
                         <button
-                          onClick={() => copiarAlPortapapeles(ticket.codigo)}
-                          className="text-sm text-blue-600 hover:text-blue-800"
+                          onClick={() =>
+                            handleCambiarEstado(ticket.id, "solucionado")
+                          }
+                          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          title="Marcar como solucionado"
                         >
-                          📋 Copiar
+                          ✓
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleCambiarEstado(ticket.id, "pendiente")
+                          }
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          title="Mover a pendientes"
+                        >
+                          ⏸
+                        </button>
+                        <button
+                          onClick={() => handleEliminar(ticket.id)}
+                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          title="Eliminar"
+                        >
+                          ✗
                         </button>
                       </div>
-                      <p className="text-sm text-gray-500 mt-1">🕐 {ticket.hora_creacion}</p>
-                    </div>
-                    <div className="flex gap-2 ml-4">
-                      <button
-                        onClick={() => handleCambiarEstado(ticket.id, 'solucionado')}
-                        className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md transition text-sm"
-                        title="Marcar como solucionado"
-                      >
-                        ✓
-                      </button>
-                      <button
-                        onClick={() => handleCambiarEstado(ticket.id, 'pendiente')}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition text-sm"
-                        title="Mover a pendientes"
-                      >
-                        ⏸
-                      </button>
-                      <button
-                        onClick={() => handleEliminar(ticket.id)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition text-sm"
-                        title="Eliminar"
-                      >
-                        ✗
-                      </button>
                     </div>
                   </div>
-                </div>
-              ))
-            )}
+                ))
+              )}
+            </div>
           </div>
         </section>
 
-        {/* PENDIENTES */}
-        <section className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <h2 className="text-2xl font-bold text-gray-800">⏸ PENDIENTES</h2>
-            <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
-              {ticketsPendientes.length}
-            </span>
-          </div>
-          <div className="space-y-3">
-            {ticketsPendientes.length === 0 ? (
-              <div className="bg-white rounded-lg p-8 text-center text-gray-500">
-                No hay tickets pendientes
-              </div>
-            ) : (
-              ticketsPendientes.map(ticket => (
-                <div key={ticket.id} className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3">
-                        <span className="text-lg font-semibold text-gray-800">{ticket.codigo}</span>
+        <div className="flex gap-6">
+          {/*TICKETS SOLUCIONADOS*/}
+          <section className=" flex-1 mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <h2 className="text-2xl font-bold text-gray-800">
+                ✅ SOLUCIONADOS
+              </h2>
+              <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                {ticketsSolucionados.length}
+              </span>
+            </div>
+            <div className="space-y-3">
+              {ticketsSolucionados.length === 0 ? (
+                <div className="bg-white rounded-lg p-8 text-center text-gray-500">
+                  No hay tickets solucionados hoy
+                </div>
+              ) : (
+                ticketsSolucionados.map((ticket) => (
+                  <div
+                    key={ticket.id}
+                    className="bg-white rounded-lg shadow-md p-2"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3">
+                          <span className="text-lg font-semibold text-gray-800">
+                            {ticket.codigo}
+                          </span>
+                          <button
+                            onClick={() => copiarAlPortapapeles(ticket.codigo)}
+                            className="text-sm text-blue-600 hover:text-blue-800"
+                          >
+                            📋 Copiar
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex gap-2 ml-4">
                         <button
-                          onClick={() => copiarAlPortapapeles(ticket.codigo)}
-                          className="text-sm text-blue-600 hover:text-blue-800"
+                          onClick={() =>
+                            handleCambiarEstado(ticket.id, "pendiente")
+                          }
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          title="Mover a pendientes"
                         >
-                          📋 Copiar
+                          ⏸
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleCambiarEstado(ticket.id, "en_proceso")
+                          }
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          title="Volver a en proceso"
+                        >
+                          ▶
+                        </button>
+                        <button
+                          onClick={() => handleEliminar(ticket.id)}
+                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition text-sm"
+                        >
+                          ✗
                         </button>
                       </div>
-                      <p className="text-sm text-gray-500 mt-1">📅 {ticket.fecha} • 🕐 {ticket.hora_creacion}</p>
-                    </div>
-                    <div className="flex gap-2 ml-4">
-                      <button
-                        onClick={() => handleCambiarEstado(ticket.id, 'solucionado')}
-                        className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md transition text-sm"
-                      >
-                        ✓
-                      </button>
-                      <button
-                        onClick={() => handleCambiarEstado(ticket.id, 'en_proceso')}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition text-sm"
-                        title="Volver a en proceso"
-                      >
-                        ▶
-                      </button>
-                      <button
-                        onClick={() => handleEliminar(ticket.id)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition text-sm"
-                      >
-                        ✗
-                      </button>
                     </div>
                   </div>
-                </div>
-              ))
-            )}
-          </div>
-        </section>
+                ))
+              )}
+            </div>
+          </section>
 
-        {/* SOLUCIONADOS */}
-        <section className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <h2 className="text-2xl font-bold text-gray-800">✅ SOLUCIONADOS</h2>
-            <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-              {ticketsSolucionados.length}
-            </span>
-          </div>
-          <div className="space-y-3">
-            {ticketsSolucionados.length === 0 ? (
-              <div className="bg-white rounded-lg p-8 text-center text-gray-500">
-                No hay tickets solucionados hoy
-              </div>
-            ) : (
-              ticketsSolucionados.map(ticket => (
-                <div key={ticket.id} className="bg-white rounded-lg shadow-md p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3">
-                        <span className="text-lg font-semibold text-gray-800">{ticket.codigo}</span>
+          {/* TICKETS PENDIENTES */}
+          <section className="flex-1 mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <h2 className="text-2xl font-bold text-gray-800">⏸ PENDIENTES</h2>
+              <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
+                {ticketsPendientes.length}
+              </span>
+            </div>
+            <div className="space-y-3">
+              {ticketsPendientes.length === 0 ? (
+                <div className="bg-white rounded-lg p-8 text-center text-gray-500">
+                  No hay tickets pendientes
+                </div>
+              ) : (
+                ticketsPendientes.map((ticket) => (
+                  <div
+                    key={ticket.id}
+                    className="bg-white rounded-lg shadow-md p-2 hover:shadow-lg transition"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3">
+                          <span className="text-lg font-semibold text-gray-800">
+                            {ticket.codigo}
+                          </span>
+                          <button
+                            onClick={() => copiarAlPortapapeles(ticket.codigo)}
+                            className="text-sm text-blue-600 hover:text-blue-800"
+                          >
+                            📋 Copiar
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex gap-2 ml-4">
                         <button
-                          onClick={() => copiarAlPortapapeles(ticket.codigo)}
-                          className="text-sm text-blue-600 hover:text-blue-800"
+                          onClick={() =>
+                            handleCambiarEstado(ticket.id, "solucionado")
+                          }
+                          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md transition text-sm"
                         >
-                          📋 Copiar
+                          ✓
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleCambiarEstado(ticket.id, "en_proceso")
+                          }
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          title="Volver a en proceso"
+                        >
+                          ▶
+                        </button>
+                        <button
+                          onClick={() => handleEliminar(ticket.id)}
+                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition text-sm"
+                        >
+                          ✗
                         </button>
                       </div>
-                      <p className="text-sm text-gray-500 mt-1">🕐 {ticket.hora_creacion}</p>
                     </div>
-                    <button
-                      onClick={() => handleEliminar(ticket.id)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition text-sm ml-4"
-                    >
-                      ✗
-                    </button>
                   </div>
-                </div>
-              ))
-            )}
-          </div>
-        </section>
+                ))
+              )}
+            </div>
+          </section>
+        </div>
       </main>
 
       {/* ÁREA DE NOTAS (VERDE) */}
       <div className="bg-green-50 border-t-4 border-green-500 py-8">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">📝 Notas y Comandos</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            📝 Notas y Comandos
+          </h2>
           <div className="bg-white rounded-lg p-6 text-gray-600">
-            Aquí irán tus comandos, procedimientos y notas importantes...
+            Comandos, procedimientos y notas importantes...
           </div>
         </div>
       </div>
