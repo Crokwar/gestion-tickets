@@ -133,23 +133,27 @@ export const Home: React.FC = () => {
         {/* EN PROCESO */}
         <section className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <h2 className="text-2xl font-bold text-gray-800">💥 EN PROCESO</h2>
+            <h2 className="text-2xl font-bold text-gray-800"> ▶ EN PROCESO</h2>
             <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
               {ticketsEnProceso.length}
             </span>
           </div>
 
-          <div>
-            <div className="space-y-3 bg-white shadow-lg rounded-md p-0.5">
+          <div className="max-h-[600px] overflow-y-auto p-3">
+            <div className="grid grid-cols-2 bg-white p-2 gap-1.5 auto-rows-min">
               {ticketsEnProceso.length === 0 ? (
-                <div className="bg-white rounded-lg p-8 text-center text-gray-500">
+                <div className="col-span-2 bg-white rounded-lg p-8 text-center text-gray-500">
                   No hay tickets en proceso
                 </div>
               ) : (
-                ticketsEnProceso.map((ticket) => (
+                ticketsEnProceso.map((ticket, index) => (
                   <div
                     key={ticket.id}
-                    className="bg-white rounded-lg shadow m-2 p-2 hover:shadow-lg transition"
+                    className="bg-gray-100 p-1.5 rounded-lg hover:shadow-lg transition"
+                    style={{
+                      gridRow: `${Math.floor(index / 2) + 1}`,
+                      gridColumn: (index % 2) + 1
+                    }}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
@@ -211,7 +215,7 @@ export const Home: React.FC = () => {
                 {ticketsSolucionados.length}
               </span>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 bg-white p-2">
               {ticketsSolucionados.length === 0 ? (
                 <div className="bg-white rounded-lg p-8 text-center text-gray-500">
                   No hay tickets solucionados hoy
@@ -220,7 +224,7 @@ export const Home: React.FC = () => {
                 ticketsSolucionados.map((ticket) => (
                   <div
                     key={ticket.id}
-                    className="bg-white rounded-lg shadow-md p-2"
+                    className="bg-gray-100 p-1.5 rounded-lg hover:shadow-lg transition"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
@@ -286,7 +290,7 @@ export const Home: React.FC = () => {
                 ticketsPendientes.map((ticket) => (
                   <div
                     key={ticket.id}
-                    className="bg-white rounded-lg shadow-md p-2 hover:shadow-lg transition"
+                    className="bg-gray rounded-lg shadow-md p-2 hover:shadow-lg transition"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
