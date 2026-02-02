@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { Ticket, EstadoTicket } from "../types/tickets";
-import { crearTicket, actualizarTicket, eliminarTicket } from "../services/api";
+import { crearTicket, actualizarTicket, eliminarTicket, obtenerTickets } from "../services/api";
 
 export const Home: React.FC = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [codigo, setCodigo] = useState("");
   const [error, setError] = useState("");
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() => {
+    cargarTickets();
+  }, []);
 
   const fechaActual = new Date().toLocaleDateString("es-ES", {
     weekday: "long",
@@ -13,6 +18,20 @@ export const Home: React.FC = () => {
     month: "long",
     day: "numeric",
   });
+
+  const cargarTickets = async () => {
+    try {
+      setCargando(true);
+      const data = await obtenerTickets();
+      setTickets(data);
+      setError('');
+    } catch (err) {
+      setError('Error al cargar tickets');
+      console.error(err);
+    } finally {
+      setCargando(false);
+    }
+  }
 
   const handleAgregarTicket = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,7 +87,7 @@ export const Home: React.FC = () => {
   const ticketsPendientes = tickets.filter((t) => t.estado === "pendiente");
   const ticketsSolucionados = tickets.filter((t) => t.estado === "solucionado");
 
-  /* if (cargando) {
+  if (cargando) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -77,7 +96,7 @@ export const Home: React.FC = () => {
         </div>
       </div>
     );
-  }*/
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

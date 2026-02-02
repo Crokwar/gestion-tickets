@@ -17,6 +17,14 @@ async function handleResponse<T>(response:Response): Promise<T> {
 
 //===============================TICKETS===================================================
 
+export async function obtenerTickets(): Promise<Ticket[]> {
+  const response = await fetch(`${API_URL}/tickets`, {
+    method: 'GET',
+    headers,
+  });
+  return handleResponse<Ticket[]>(response);
+}
+
 export async function crearTicket(ticket:TicketCreate): Promise<Ticket> {
     const response = await fetch(`${API_URL}/tickets`, {
         method: 'POST',
