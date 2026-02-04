@@ -196,23 +196,23 @@ export const Home: React.FC = () => {
                           className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md transition text-sm"
                           title="Marcar como solucionado"
                         >
-                          ✓
+                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M389-267 195-460l51-52 143 143 325-324 51 51-376 375Z"/></svg>
                         </button>
                         <button
                           onClick={() =>
                             handleCambiarEstado(ticket.id, "pendiente")
                           }
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md transition text-sm"
                           title="Mover a pendientes"
                         >
-                          ⏸
+                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M528-192v-576h240v576H528Zm-336 0v-576h240v576H192Zm408-72h96v-432h-96v432Zm-336 0h96v-432h-96v432Zm0-432v432-432Zm336 0v432-432Z"/></svg>
                         </button>
                         <button
                           onClick={() => handleEliminar(ticket.id)}
                           className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition text-sm"
                           title="Eliminar"
                         >
-                          ✗
+                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z"/></svg>
                         </button>
                       </div>
                     </div>
@@ -260,29 +260,29 @@ export const Home: React.FC = () => {
                         </div>
                       </div>
                       <div className="flex gap-2 ml-4">
-                        <button
-                          onClick={() =>
-                            handleCambiarEstado(ticket.id, "pendiente")
-                          }
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition text-sm"
-                          title="Mover a pendientes"
-                        >
-                          ⏸
-                        </button>
-                        <button
+                                                <button
                           onClick={() =>
                             handleCambiarEstado(ticket.id, "en_proceso")
                           }
                           className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition text-sm"
                           title="Volver a en proceso"
                         >
-                          ▶
+                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z"/></svg>
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleCambiarEstado(ticket.id, "pendiente")
+                          }
+                          className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          title="Mover a pendientes"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M528-192v-576h240v576H528Zm-336 0v-576h240v576H192Zm408-72h96v-432h-96v432Zm-336 0h96v-432h-96v432Zm0-432v432-432Zm336 0v432-432Z"/></svg>
                         </button>
                         <button
                           onClick={() => handleEliminar(ticket.id)}
                           className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition text-sm"
                         >
-                          ✗
+                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z"/></svg>
                         </button>
                       </div>
                     </div>
@@ -332,7 +332,7 @@ export const Home: React.FC = () => {
                           }
                           className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md transition text-sm"
                         >
-                          ✓
+                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M389-267 195-460l51-52 143 143 325-324 51 51-376 375Z"/></svg>
                         </button>
                         <button
                           onClick={() =>
@@ -341,13 +341,13 @@ export const Home: React.FC = () => {
                           className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition text-sm"
                           title="Volver a en proceso"
                         >
-                          ▶
+                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z"/></svg>
                         </button>
                         <button
                           onClick={() => handleEliminar(ticket.id)}
                           className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition text-sm"
                         >
-                          ✗
+                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z"/></svg>
                         </button>
                       </div>
                     </div>
