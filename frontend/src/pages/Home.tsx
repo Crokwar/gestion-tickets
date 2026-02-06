@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import type { Ticket, EstadoTicket } from "../types/tickets";
 import { crearTicket, actualizarTicket, eliminarTicket, obtenerTickets } from "../services/api";
+import { CirclePause, CirclePlay, CircleCheck, Copy, X, Pause, Check, Play } from "lucide-react"
 
 export const Home: React.FC = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -152,16 +153,18 @@ export const Home: React.FC = () => {
         {/* EN PROCESO */}
         <section className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <h2 className="text-2xl font-bold text-gray-800"> ▶ EN PROCESO</h2>
+            <h2 className="flex gap-2 text-2xl font-bold text-gray-800">
+              <CirclePlay className="bg-blue-500 rounded-full text-white" size={30} />
+              EN PROCESO</h2>
             <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
               {ticketsEnProceso.length}
             </span>
           </div>
 
-          <div className="max-h-[600px] overflow-y-auto p-3">
-            <div className="grid grid-cols-2 bg-white p-2 gap-1.5 auto-rows-min">
+          <div className="max-h-[600px] overflow-y-auto">
+            <div className="grid grid-cols-2 bg-blue-100 p-2 gap-1.5 auto-rows-min">
               {ticketsEnProceso.length === 0 ? (
-                <div className="col-span-2 bg-white rounded-lg p-8 text-center text-gray-500">
+                <div className="col-span-2 bg-blue-100 rounded-lg p-8 text-center text-gray-500">
                   No hay tickets en proceso
                 </div>
               ) : (
@@ -182,37 +185,38 @@ export const Home: React.FC = () => {
                           </span>
                           <button
                             onClick={() => copiarAlPortapapeles(ticket.codigo)}
-                            className="text-sm text-blue-600 hover:text-blue-800"
+                            className="flex gap-1 text-xs text-blue-600 hover:text-blue-800 hover:bg-blue-100"
                           >
-                            📋 Copiar
+                            <Copy className="text-black" size={14} />
+                            Copiar
                           </button>
                         </div>
                       </div>
-                      <div className="flex gap-2 ml-4">
+                      <div className="flex gap-1 ml-4">
                         <button
                           onClick={() =>
                             handleCambiarEstado(ticket.id, "solucionado")
                           }
-                          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          className="bg-green-500 hover:bg-green-600 text-white px-2 py-2 rounded-md transition text-sm"
                           title="Marcar como solucionado"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M389-267 195-460l51-52 143 143 325-324 51 51-376 375Z"/></svg>
+                          <Check className="text-white" size={14} />
                         </button>
                         <button
                           onClick={() =>
                             handleCambiarEstado(ticket.id, "pendiente")
                           }
-                          className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          className="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-2 rounded-md transition text-sm"
                           title="Mover a pendientes"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M528-192v-576h240v576H528Zm-336 0v-576h240v576H192Zm408-72h96v-432h-96v432Zm-336 0h96v-432h-96v432Zm0-432v432-432Zm336 0v432-432Z"/></svg>
+                          <Pause className="text-white" size={14} />  
                         </button>
                         <button
                           onClick={() => handleEliminar(ticket.id)}
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          className="bg-red-500 hover:bg-red-600 text-white px-2 py-2 rounded-md transition text-sm"
                           title="Eliminar"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z"/></svg>
+                          <X className="text-white" size={14} />
                         </button>
                       </div>
                     </div>
@@ -227,16 +231,17 @@ export const Home: React.FC = () => {
           {/*TICKETS SOLUCIONADOS*/}
           <section className=" flex-1 mb-8">
             <div className="flex items-center gap-3 mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">
-                ✅ SOLUCIONADOS
+              <h2 className="flex gap-2 text-2xl font-bold text-gray-800">
+                <CircleCheck className="bg-green-500 rounded-full text-white" size={30} />
+                SOLUCIONADOS
               </h2>
               <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
                 {ticketsSolucionados.length}
               </span>
             </div>
-            <div className="space-y-3 bg-white p-2">
+            <div className="space-y-3 bg-green-100  p-2">
               {ticketsSolucionados.length === 0 ? (
-                <div className="bg-white rounded-lg p-8 text-center text-gray-500">
+                <div className="bg-green-100 rounded-lg p-8 text-center text-gray-500">
                   No hay tickets solucionados hoy
                 </div>
               ) : (
@@ -253,36 +258,38 @@ export const Home: React.FC = () => {
                           </span>
                           <button
                             onClick={() => copiarAlPortapapeles(ticket.codigo)}
-                            className="text-sm text-blue-600 hover:text-blue-800"
+                            className="flex gap-1 text-xs text-blue-600 hover:text-blue-800"
                           >
-                            📋 Copiar
+                            <Copy className="text-black" size={14} />
+                            Copiar
                           </button>
                         </div>
                       </div>
-                      <div className="flex gap-2 ml-4">
-                                                <button
+                      <div className="flex gap-1 ml-4">
+                        <button
                           onClick={() =>
                             handleCambiarEstado(ticket.id, "en_proceso")
                           }
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-2 rounded-md transition text-sm"
                           title="Volver a en proceso"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z"/></svg>
+                          <Play className="text-white" size={14} />
                         </button>
                         <button
                           onClick={() =>
                             handleCambiarEstado(ticket.id, "pendiente")
                           }
-                          className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          className="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-2 rounded-md transition text-sm"
                           title="Mover a pendientes"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M528-192v-576h240v576H528Zm-336 0v-576h240v576H192Zm408-72h96v-432h-96v432Zm-336 0h96v-432h-96v432Zm0-432v432-432Zm336 0v432-432Z"/></svg>
+                          <Pause className="text-white" size={14} />  
                         </button>
                         <button
                           onClick={() => handleEliminar(ticket.id)}
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          className="bg-red-500 hover:bg-red-600 text-white px-2 py-2 rounded-md transition text-sm"
+                          title="Eliminar"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z"/></svg>
+                          <X className="text-white" size={14} />
                         </button>
                       </div>
                     </div>
@@ -295,21 +302,23 @@ export const Home: React.FC = () => {
           {/* TICKETS PENDIENTES */}
           <section className="flex-1 mb-8">
             <div className="flex items-center gap-3 mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">⏸ PENDIENTES</h2>
+              <h2 className="flex  gap-2 text-2xl font-bold text-gray-800">
+                <CirclePause className="bg-yellow-300 rounded-full text-white" size={30} />
+                 PENDIENTES</h2>
               <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
                 {ticketsPendientes.length}
               </span>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 bg-yellow-100 p-2">
               {ticketsPendientes.length === 0 ? (
-                <div className="bg-white rounded-lg p-8 text-center text-gray-500">
+                <div className="bg-yellow-100 rounded-lg p-8 text-center text-gray-500">
                   No hay tickets pendientes
                 </div>
               ) : (
                 ticketsPendientes.map((ticket) => (
                   <div
                     key={ticket.id}
-                    className="bg-gray rounded-lg shadow-md p-2 hover:shadow-lg transition"
+                    className="bg-gray-100 p-1.5 rounded-lg hover:shadow-lg transition"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
@@ -319,35 +328,38 @@ export const Home: React.FC = () => {
                           </span>
                           <button
                             onClick={() => copiarAlPortapapeles(ticket.codigo)}
-                            className="text-sm text-blue-600 hover:text-blue-800"
+                            className="flex gap-1 text-xs text-blue-600 hover:text-blue-800"
                           >
-                            📋 Copiar
+                            <Copy className="text-black" size={14} />
+                            Copiar
                           </button>
                         </div>
                       </div>
-                      <div className="flex gap-2 ml-4">
+                      <div className="flex gap-1 ml-4">
                         <button
                           onClick={() =>
                             handleCambiarEstado(ticket.id, "solucionado")
                           }
-                          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          className="bg-green-500 hover:bg-green-600 text-white px-2 py-2 rounded-md transition text-sm"
+                          title="Marcar como solucionado"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M389-267 195-460l51-52 143 143 325-324 51 51-376 375Z"/></svg>
+                          <Check className="text-white" size={14} />
                         </button>
                         <button
                           onClick={() =>
                             handleCambiarEstado(ticket.id, "en_proceso")
                           }
-                          className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          className="bg-blue-500 hover:bg-blue-600 text-white px-2 py-2 rounded-md transition text-sm"
                           title="Volver a en proceso"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="M320-200v-560l440 280-440 280Zm80-280Zm0 134 210-134-210-134v268Z"/></svg>
+                          <Play className="text-white" size={14} />
                         </button>
                         <button
                           onClick={() => handleEliminar(ticket.id)}
-                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition text-sm"
+                          className="bg-red-500 hover:bg-red-600 text-white px-2 py-2 rounded-md transition text-sm"
+                          title="Eliminar"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#e3e3e3"><path d="m291-240-51-51 189-189-189-189 51-51 189 189 189-189 51 51-189 189 189 189-51 51-189-189-189 189Z"/></svg>
+                          <X className="text-white" size={14} />
                         </button>
                       </div>
                     </div>
