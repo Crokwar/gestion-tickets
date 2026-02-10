@@ -42,3 +42,7 @@ def eliminar_ticket(id: int, db: Session = Depends(get_db)):
     if not ticket:
         raise HTTPException(status_code=404, detail="Ticket no Eliminado")
     return ticket
+
+@api.get("/tickets/historial")
+def obtener_historial(db : Session = Depends(get_db)):
+    return crud.obtener_historial_solucionados(db=db)

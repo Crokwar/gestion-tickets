@@ -62,3 +62,7 @@ def eliminar_ticket(db:Session, ticket_id: int):
     db.commit()
 
     return True
+
+def obtener_historial_solucionados(db: Session):
+    return db.query(models.Ticket).filter(models.Ticket.estado == "solucionado")\
+    .order_by(models.Ticket.fecha.desc(), models.Ticket.hora_creacion).all()
