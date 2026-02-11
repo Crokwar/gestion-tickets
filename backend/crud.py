@@ -41,6 +41,13 @@ def actualizar_ticket(db:Session, ticket_id: int, ticket_update: schemas.TicketU
         return None
     
     if ticket_update.estado is not None:
+
+        if ticket_update.estado == "solucionado":
+            db_ticket.fecha_cierre = datetime.now().strftime("%Y-%m-%d")
+
+        else:
+            db_ticket.fecha_cierre = None
+            
         db_ticket.estado = ticket_update.estado
 
     if ticket_update.detalles is not None:
