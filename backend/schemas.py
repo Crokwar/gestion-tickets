@@ -20,6 +20,7 @@ class Ticket(TicketBase):
     id: int
     fecha: str
     hora_creacion: str
+    fecha_cierre: Optional[str] = None
 
 
 class Config:

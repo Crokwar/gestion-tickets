@@ -53,3 +53,11 @@ export async function eliminarTicket(id: number): Promise<void> {
     throw new Error('Error al eliminar ticket');
   }
 }
+
+export async function ObtenerHistorial(): Promise<Ticket[]> {
+  const response = await fetch(`${API_URL}/tickets/historial`,{
+    method: 'GET',
+    headers,
+  });
+  return handleResponse<Ticket[]>(response)
+}

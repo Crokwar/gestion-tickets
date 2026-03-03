@@ -1,13 +1,28 @@
 import React, { useEffect, useState } from "react";
 import type { Ticket, EstadoTicket } from "../types/tickets";
-import { crearTicket, actualizarTicket, eliminarTicket, obtenerTickets } from "../services/api";
-import { CirclePause, CirclePlay, CircleCheck, Copy, X, Pause, Check, Play } from "lucide-react"
+import {
+  crearTicket,
+  actualizarTicket,
+  eliminarTicket,
+  obtenerTickets,
+} from "../services/api";
+import {
+  CirclePause,
+  CirclePlay,
+  CircleCheck,
+  Copy,
+  X,
+  Pause,
+  Check,
+  Play,
+} from "lucide-react";
 
 export const Home: React.FC = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [codigo, setCodigo] = useState("");
   const [error, setError] = useState("");
   const [cargando, setCargando] = useState(true);
+  const [vistaActual, setVistaActual] = useState<"hoy" | "historial">("hoy");
 
   useEffect(() => {
     cargarTickets();
@@ -25,14 +40,14 @@ export const Home: React.FC = () => {
       setCargando(true);
       const data = await obtenerTickets();
       setTickets(data);
-      setError('');
+      setError("");
     } catch (err) {
-      setError('Error al cargar tickets');
+      setError("Error al cargar tickets");
       console.error(err);
     } finally {
       setCargando(false);
     }
-  }
+  };
 
   const handleAgregarTicket = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,10 +125,26 @@ export const Home: React.FC = () => {
               <p className="text-blue-100 mt-1 capitalize">📅 {fechaActual}</p>
             </div>
             <div className="flex gap-3">
-              <button className="bg-white text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-50 transition">
+              <button
+                onClick={() => setVistaActual("hoy")}
+                className={`${
+                  vistaActual === 'hoy'
+                  ? "bg-white text-blue-600"
+                  : "bg-blue-700 text white"
+                  } px-4 py-2 rounded-lg font-medium hover:bg-blue-500 transition`
+                }
+              >
                 Hoy
               </button>
-              <button className="bg-blue-700 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-600 transition">
+              <button 
+                onClick={() => setVistaActual('historial')}
+                className={`${
+                  vistaActual === 'historial'
+                  ? "bg-white text-blue-600"
+                  : "bg-blue-700 text white"
+                  } px-4 py-2 rounded-lg font-medium hover:bg-blue-400 transition`
+                }
+              >
                 Historial
               </button>
             </div>
@@ -154,8 +185,12 @@ export const Home: React.FC = () => {
         <section className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <h2 className="flex gap-2 text-2xl font-bold text-gray-800">
-              <CirclePlay className="bg-blue-500 rounded-full text-white" size={30} />
-              EN PROCESO</h2>
+              <CirclePlay
+                className="bg-blue-500 rounded-full text-white"
+                size={30}
+              />
+              EN PROCESO
+            </h2>
             <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
               {ticketsEnProceso.length}
             </span>
@@ -174,7 +209,7 @@ export const Home: React.FC = () => {
                     className="bg-gray-100 p-1.5 rounded-lg hover:shadow-lg transition"
                     style={{
                       gridRow: `${Math.floor(index / 2) + 1}`,
-                      gridColumn: (index % 2) + 1
+                      gridColumn: (index % 2) + 1,
                     }}
                   >
                     <div className="flex items-center justify-between">
@@ -209,7 +244,7 @@ export const Home: React.FC = () => {
                           className="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-2 rounded-md transition text-sm"
                           title="Mover a pendientes"
                         >
-                          <Pause className="text-white" size={14} />  
+                          <Pause className="text-white" size={14} />
                         </button>
                         <button
                           onClick={() => handleEliminar(ticket.id)}
@@ -232,7 +267,10 @@ export const Home: React.FC = () => {
           <section className=" flex-1 mb-8">
             <div className="flex items-center gap-3 mb-4">
               <h2 className="flex gap-2 text-2xl font-bold text-gray-800">
-                <CircleCheck className="bg-green-500 rounded-full text-white" size={30} />
+                <CircleCheck
+                  className="bg-green-500 rounded-full text-white"
+                  size={30}
+                />
                 SOLUCIONADOS
               </h2>
               <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
@@ -282,7 +320,7 @@ export const Home: React.FC = () => {
                           className="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-2 rounded-md transition text-sm"
                           title="Mover a pendientes"
                         >
-                          <Pause className="text-white" size={14} />  
+                          <Pause className="text-white" size={14} />
                         </button>
                         <button
                           onClick={() => handleEliminar(ticket.id)}
@@ -303,8 +341,12 @@ export const Home: React.FC = () => {
           <section className="flex-1 mb-8">
             <div className="flex items-center gap-3 mb-4">
               <h2 className="flex  gap-2 text-2xl font-bold text-gray-800">
-                <CirclePause className="bg-yellow-300 rounded-full text-white" size={30} />
-                 PENDIENTES</h2>
+                <CirclePause
+                  className="bg-yellow-300 rounded-full text-white"
+                  size={30}
+                />
+                PENDIENTES
+              </h2>
               <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
                 {ticketsPendientes.length}
               </span>

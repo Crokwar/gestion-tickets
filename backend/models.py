@@ -10,6 +10,7 @@ class Ticket(Base):
     estado = Column(String, default="en_proceso", nullable=False)
     fecha = Column(String, nullable=False)
     hora_creacion = Column(String, nullable=False)
+    fecha_cierre = Column(String, nullable=True)
     detalles = Column(String, nullable=True)
 
     def __repr__(self):
